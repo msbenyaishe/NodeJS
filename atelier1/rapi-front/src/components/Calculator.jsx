@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_BASE = "https://node-js-uzbs.vercel.app/";
+const API_BASE = "https://node-js-uzbs.vercel.app";
 
 export default function Calculator() {
   const [n1, setN1] = useState("");
