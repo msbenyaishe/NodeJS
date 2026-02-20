@@ -1,36 +1,42 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const cors = require('cors')
 
 const config = require('../config.json')
 const { success, error } = require('../functions')
 
 const app = express()
 
-// Members array
+/* ================= MIDDLEWARES ================= */
+
+// Logger
+app.use(morgan('dev'))
+
+// Body parser
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+// CORS (IMPORTANT)
+app.use(cors({
+  origin: ["http://localhost:5173"], // your React dev server
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type"]
+}))
+
+// Handle preflight requests
+app.options('*', cors())
+
+/* ================= DATA ================= */
+
 let members = [
   { id: 1, name: 'PHP' },
   { id: 2, name: 'JavaScript' },
   { id: 3, name: 'Java' }
 ]
 
-// Router
+/* ================= ROUTER ================= */
+
 let MembersRouter = express.Router()
-
-// Middlewares
-app.use(morgan('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-
-// CORS
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-  next()
-})
-
-/* ================= ROUTES ================= */
 
 // GET all members
 MembersRouter.route('/')
@@ -38,26 +44,27 @@ MembersRouter.route('/')
     res.json(success(members))
   })
 
-// ADD new member
+  // ADD new member
   .post((req, res) => {
-    if (req.body.name) {
 
-      let sameName = members.some(m => m.name === req.body.name)
-
-      if (sameName) {
-        res.json(error('name already taken'))
-      } else {
-        let member = {
-          id: createID(),
-          name: req.body.name
-        }
-        members.push(member)
-        res.json(success(member))
-      }
-
-    } else {
-      res.json(error('no name value'))
+    if (!req.body.name) {
+      return res.json(error('no name value'))
     }
+
+    let sameName = members.some(m => m.name === req.body.name)
+
+    if (sameName) {
+      return res.json(error('name already taken'))
+    }
+
+    let member = {
+      id: createID(),
+      name: req.body.name
+    }
+
+    members.push(member)
+
+    res.json(success(member))
   })
 
 // GET / PUT / DELETE by ID
@@ -67,43 +74,45 @@ MembersRouter.route('/:id')
     let index = getIndex(req.params.id)
 
     if (typeof index === 'string') {
-      res.json(error(index))
-    } else {
-      res.json(success(members[index]))
+      return res.json(error(index))
     }
+
+    res.json(success(members[index]))
   })
 
   .put((req, res) => {
     let index = getIndex(req.params.id)
 
     if (typeof index === 'string') {
-      res.json(error(index))
-    } else {
-      let same = members.some(
-        m => m.name === req.body.name && m.id != req.params.id
-      )
-
-      if (same) {
-        res.json(error('same name'))
-      } else {
-        members[index].name = req.body.name
-        res.json(success(true))
-      }
+      return res.json(error(index))
     }
+
+    let same = members.some(
+      m => m.name === req.body.name && m.id != req.params.id
+    )
+
+    if (same) {
+      return res.json(error('same name'))
+    }
+
+    members[index].name = req.body.name
+
+    res.json(success(true))
   })
 
   .delete((req, res) => {
     let index = getIndex(req.params.id)
 
     if (typeof index === 'string') {
-      res.json(error(index))
-    } else {
-      members.splice(index, 1)
-      res.json(success(members))
+      return res.json(error(index))
     }
+
+    members.splice(index, 1)
+
+    res.json(success(members))
   })
 
-/* ================= CONFIG ================= */
+/* ================= ROUTE PREFIX ================= */
 
 app.use(config.rootAPI + 'members', MembersRouter)
 
@@ -119,5 +128,7 @@ function getIndex(id) {
 function createID() {
   return members[members.length - 1].id + 1
 }
+
+/* ================= EXPORT ================= */
 
 module.exports = app

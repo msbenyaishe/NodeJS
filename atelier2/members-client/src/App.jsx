@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-const API_URL = "https://members-api.vercel.app/api/v1/members"
+const API_URL = "https://node-js-members-9iz5ktzhc-mohamed-saids-projects-5a702ee0.vercel.app/api/v1/members"
 
 function App() {
   const [members, setMembers] = useState([])
