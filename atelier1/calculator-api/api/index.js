@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const app = express();
 let CalculRouter = express.Router();
@@ -11,15 +12,15 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// CORS
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+// ✅ Proper CORS Configuration
+app.use(cors({
+  origin: "*", // allow all origins (for learning purpose)
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type"]
+}));
+
+// Explicitly handle preflight requests
+app.options("*", cors());
 
 // Response helper
 function success(result) {
@@ -41,9 +42,8 @@ CalculRouter.post('/produit', (req, res) => {
   res.json(success("le produit de " + nb1 + " et " + nb2 + " est : " + r));
 });
 
-// IMPORTANT ROUTE PREFIX
+// Route prefix
 app.use("/api/v1/calculs", CalculRouter);
 
-// ❌ REMOVE app.listen
-// ✅ EXPORT APP
+// Export for Vercel
 module.exports = app;
