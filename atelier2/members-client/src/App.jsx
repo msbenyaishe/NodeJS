@@ -1,84 +1,89 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
+import "./App.css" // Import your new styles
 
-const API_URL = "https://node-js-members-9iz5ktzhc-mohamed-saids-projects-5a702ee0.vercel.app/api/v1/members"
+const API_URL = "https://node-js-members.vercel.app/api/v1/members"
 
 function App() {
   const [members, setMembers] = useState([])
   const [name, setName] = useState("")
   const [editId, setEditId] = useState(null)
 
-  // READ
   const fetchMembers = () => {
-    axios.get(API_URL)
-      .then(res => setMembers(res.data.result))
+    axios.get(API_URL).then(res => setMembers(res.data.result || []))
   }
 
   useEffect(() => {
     fetchMembers()
   }, [])
 
-  // CREATE
-  const addMember = () => {
-    if (!name) return
+  const handleSubmit = () => {
+    if (!name.trim()) return
+    const request = editId 
+      ? axios.put(`${API_URL}/${editId}`, { name })
+      : axios.post(API_URL, { name })
 
-    axios.post(API_URL, { name })
-      .then(() => {
-        setName("")
-        fetchMembers()
-      })
+    request.then(() => {
+      setName("")
+      setEditId(null)
+      fetchMembers()
+    })
   }
 
-  // UPDATE
-  const updateMember = () => {
-    axios.put(`${API_URL}/${editId}`, { name })
-      .then(() => {
-        setEditId(null)
-        setName("")
-        fetchMembers()
-      })
-  }
-
-  // DELETE
   const deleteMember = (id) => {
-    axios.delete(`${API_URL}/${id}`)
-      .then(() => fetchMembers())
+    if(window.confirm("Delete this member?")) {
+      axios.delete(`${API_URL}/${id}`).then(fetchMembers)
+    }
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Members CRUD</h1>
+    <div className="container">
+      <div className="card">
+        <header className="header">
+          <h1>Team Members</h1>
+          <p>Directory of all registered users</p>
+        </header>
 
-      <input
-        value={name}
-        onChange={e => setName(e.target.value)}
-        placeholder="Member name"
-      />
+        <div className="input-group">
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Name..."
+            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          />
+          <button 
+            onClick={handleSubmit} 
+            className={`btn ${editId ? 'btn-success' : 'btn-primary'}`}
+          >
+            {editId ? "Update" : "Add"}
+          </button>
+        </div>
 
-      {editId ? (
-        <button onClick={updateMember}>Update</button>
-      ) : (
-        <button onClick={addMember}>Add</button>
-      )}
-
-      <ul>
-        {members.map(m => (
-          <li key={m.id}>
-            {m.name}
-            {" "}
-            <button onClick={() => {
-              setEditId(m.id)
-              setName(m.name)
-            }}>
-              Edit
-            </button>
-            {" "}
-            <button onClick={() => deleteMember(m.id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+        <ul className="member-list">
+          {members.map(m => (
+            <li key={m.id} className="member-item">
+              <div className="member-info">
+                <div className="avatar">{m.name.charAt(0).toUpperCase()}</div>
+                <span className="member-name">{m.name}</span>
+              </div>
+              <div className="actions">
+                <button 
+                  className="action-link edit" 
+                  onClick={() => { setEditId(m.id); setName(m.name); }}
+                >
+                  Edit
+                </button>
+                <button 
+                  className="action-link delete" 
+                  onClick={() => deleteMember(m.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
