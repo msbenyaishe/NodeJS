@@ -1,0 +1,16 @@
+{
+  "name": "members-api",
+  "version": "1.0.0",
+  "description": "Members REST API",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "body-parser": "^1.20.2",
+    "morgan": "^1.10.0"
+  }
+}
