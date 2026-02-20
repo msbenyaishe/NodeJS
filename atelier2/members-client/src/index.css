@@ -66,3 +66,101 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+/* 1. Definitions for your React Classes */
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box; /* Crucial for responsive widths */
+}
+
+.card {
+  width: 100%;
+  max-width: 600px;
+  /* This prevents the card from being wider than the phone screen */
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #646cff;
+}
+
+.member-list {
+  list-style: none;
+  padding: 0;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  background: #646cff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* 2. Responsive Logic for 720px */
+@media (max-width: 720px) {
+  body {
+    display: block; /* Overrides 'flex' so you can scroll on phones */
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 2em; /* Shrinks the massive 3.2em size */
+    text-align: center;
+  }
+
+  .header {
+    text-align: center;
+  }
+
+  .input-group {
+    flex-direction: column; /* Stacks input and button vertically */
+  }
+
+  button {
+    width: 100%; /* Makes buttons easier to hit with a thumb */
+    margin-bottom: 10px;
+  }
+
+  .member-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+}
