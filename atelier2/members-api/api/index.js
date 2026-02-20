@@ -29,9 +29,9 @@ app.options('*', cors())
 /* ================= DATA ================= */
 
 let members = [
-  { id: 1, name: 'PHP' },
-  { id: 2, name: 'JavaScript' },
-  { id: 3, name: 'Java' }
+  { id: 1, name: 'Mohamed Said' },
+  { id: 2, name: 'Houdaifa' },
+  { id: 3, name: 'Mostafa' }
 ]
 
 /* ================= ROUTER ================= */
