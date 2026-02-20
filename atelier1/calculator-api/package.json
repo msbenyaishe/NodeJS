@@ -1,0 +1,27 @@
+{
+  "name": "calculator-api",
+  "version": "1.0.0",
+  "description": "Simple calculator REST API using Express",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js",
+    "test": "echo \"No test specified\""
+  },
+  "keywords": [
+    "calculator",
+    "api",
+    "express",
+    "nodejs"
+  ],
+  "author": "Mohamed Said",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

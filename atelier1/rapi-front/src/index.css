@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Page Layout - Clean & Flat */
+.app-container {
+  min-height: 100vh;
+  background-color: #ffffff; /* Clean white background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Card - Minimalist & Flat */
+.calculator-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px; /* Reduced padding for a tighter look */
+}
+
+/* Header */
+.card-header {
+  margin-bottom: 32px;
+}
+
+.card-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.card-header span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Inputs - Modern Borderless Style */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #374151;
+  font-weight: 500;
+  display: block;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 0; /* Only vertical padding */
+  border: none;
+  border-bottom: 2px solid #e5e7eb; /* Bottom line only for a sleek look */
+  background: transparent;
+  font-size: 16px;
+  color: #111827;
+  border-radius: 0;
+  transition: border-color 0.2s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-bottom-color: #111827; /* Dark focus line */
+}
+
+/* Buttons - Solid & Clean */
+.button-group {
+  display: flex;
+  flex-direction: column; /* Stacked buttons feel more modern on mobile/web */
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button-group button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  background: #111827;
+  color: #ffffff;
+  transition: opacity 0.2s ease;
+}
+
+.button-group button:hover {
+  opacity: 0.85;
+}
+
+.button-group button.secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Result Boxes */
+.result-box {
+  margin-top: 24px;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.result-box.success {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.result-box.error {
+  background: #fef2f2;
+  color: #991b1b;
+}
