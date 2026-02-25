@@ -9,9 +9,13 @@ const app = express()
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://atelier4-jwt-api.vercel.app"
-  ]
+    "https://atelier4-jwt-frontend.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }))
+
+app.options("*", cors())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
