@@ -22,8 +22,8 @@ const SECRET = process.env.JWT_SECRET || "members_secret_key"
 
 const testUser = {
   id: 1,
-  username: "admin",
-  password: "123456"
+  username: "msbenyaishe",
+  password: "said2005"
 }
 
 /* ================= FAKE DATABASE ================= */
