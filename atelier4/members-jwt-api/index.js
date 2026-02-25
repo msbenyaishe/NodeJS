@@ -7,7 +7,10 @@ const app = express()
 /* ================= MIDDLEWARE ================= */
 
 app.use(cors({
-  origin: "*"
+  origin: [
+    "http://localhost:5173",
+    "https://atelier4-jwt-api.vercel.app"
+  ]
 }))
 
 app.use(express.json())
@@ -62,7 +65,7 @@ app.post("/api/login", (req, res) => {
 /* ================= VERIFY TOKEN ================= */
 
 function verifyToken(req, res, next) {
-  const bearerHeader = req.headers.authorization
+  const bearerHeader = req.headers.authorization || ""
 
   if (!bearerHeader) {
     return res.status(403).json({

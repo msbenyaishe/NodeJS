@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const API = axios.create({
-  baseURL: "https://atelier4-jwt-api.vercel.app/"
+  baseURL: "https://atelier4-jwt-api.vercel.app/api"
 })
 
 // Automatically attach token

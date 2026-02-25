@@ -9,11 +9,15 @@ function Members() {
   const [errorMsg, setErrorMsg] = useState("")
   const navigate = useNavigate()
 
+  /* ================= FETCH MEMBERS ================= */
+
   const fetchMembers = async () => {
     try {
       const res = await API.get("/members")
       setMembers(res.data.result || [])
-    } catch {
+    } catch (err) {
+      // If token invalid or expired → logout
+      localStorage.removeItem("token")
       navigate("/")
     }
   }
@@ -21,6 +25,8 @@ function Members() {
   useEffect(() => {
     fetchMembers()
   }, [])
+
+  /* ================= CREATE / UPDATE ================= */
 
   const handleSubmit = async () => {
     if (!name.trim()) {
@@ -30,7 +36,10 @@ function Members() {
 
     try {
       if (editId) {
-        await API.put(`/members/${editId}`, { name })
+        await API.put(`/members/${editId}`, {
+          name,
+          email: "test@mail.com"
+        })
       } else {
         await API.post("/members", {
           name,
@@ -42,16 +51,25 @@ function Members() {
       setEditId(null)
       setErrorMsg("")
       fetchMembers()
-    } catch {
+    } catch (err) {
       setErrorMsg("Server error")
     }
   }
 
+  /* ================= DELETE ================= */
+
   const deleteMember = async (id) => {
     if (!window.confirm("Delete this member?")) return
-    await API.delete(`/members/${id}`)
-    fetchMembers()
+
+    try {
+      await API.delete(`/members/${id}`)
+      fetchMembers()
+    } catch {
+      setErrorMsg("Delete failed")
+    }
   }
+
+  /* ================= LOGOUT ================= */
 
   const logout = () => {
     localStorage.removeItem("token")
@@ -118,6 +136,7 @@ function Members() {
         </ul>
 
         <br />
+
         <button
           onClick={logout}
           className="btn btn-primary"
