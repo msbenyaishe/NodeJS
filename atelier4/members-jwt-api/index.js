@@ -1,28 +1,39 @@
 const express = require("express")
 const jwt = require("jsonwebtoken")
-const cors = require("cors")
 
 const app = express()
 
-/* ================= MIDDLEWARE ================= */
+/* ================= CORS FIX FOR VERCEL ================= */
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Origin",
     "https://atelier4-jwt-frontend.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}))
+  )
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  )
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  )
 
-app.options("*", cors())
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200)
+  }
+
+  next()
+})
+
+/* ================= BODY PARSER ================= */
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 /* ================= ENV CONFIG ================= */
 
-const PORT = process.env.PORT || 5000
 const SECRET = process.env.JWT_SECRET || "members_secret_key"
 
 /* ================= TEST USER ================= */
@@ -66,18 +77,18 @@ app.post("/api/login", (req, res) => {
   })
 })
 
-/* ================= VERIFY TOKEN ================= */
+/* ================= VERIFY TOKEN MIDDLEWARE ================= */
 
 function verifyToken(req, res, next) {
-  const bearerHeader = req.headers.authorization || ""
+  const authHeader = req.headers.authorization || ""
 
-  if (!bearerHeader) {
+  if (!authHeader.startsWith("Bearer ")) {
     return res.status(403).json({
       message: "Access denied. Token required."
     })
   }
 
-  const token = bearerHeader.split(" ")[1]
+  const token = authHeader.split(" ")[1]
 
   jwt.verify(token, SECRET, (err, decoded) => {
     if (err) {
@@ -174,6 +185,6 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "API is running..." })
 })
 
-/* ================= START SERVER ================= */
+/* ================= EXPORT FOR VERCEL ================= */
 
 module.exports = app
