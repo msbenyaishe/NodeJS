@@ -1,0 +1,20 @@
+{
+  "name": "books-service",
+  "version": "1.0.0",
+  "description": "Books Microservice - Node.js + MongoDB Atlas",
+  "main": "api/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node api/index.js"
+  },
+  "keywords": ["microservice", "books", "nodejs", "mongodb", "vercel"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.6.0"
+  }
+}
